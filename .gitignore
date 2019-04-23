@@ -23,3 +23,9 @@ OpenChem/
 
 # pytest
 .coverage
+
+# Local settings
+.vs/ProjectSettings.json
+.vs/VSWorkspaceState.json
+.vs/slnx.sqlite
+.vs/ReLeaSE/v15/.suo
