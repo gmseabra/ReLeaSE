@@ -42,7 +42,7 @@ class GeneratorData(object):
             parameter specifying if GPU is used for computations. If left
             unspecified, GPU will be used if available
 
-        kwargs: additional positional arguments
+        kwargs: additional keyword arguments
             These include cols_to_read (list, default [0]) specifying which
             column in the file with training data contains training sequences
             and delimiter (str, default ',') that will be used to separate
@@ -59,7 +59,9 @@ class GeneratorData(object):
         self.start_token = start_token
         self.end_token = end_token
         self.file = []
+        # Each element in self.file will have the format: <SMILES>
         for i in range(len(data)):
+            # Filter SMILES that are too long
             if len(data[i]) <= max_len:
                 self.file.append(self.start_token + data[i] + self.end_token) 
         self.file_len = len(self.file)

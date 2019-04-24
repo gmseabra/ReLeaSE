@@ -11,7 +11,8 @@ from torch.autograd import Variable
 import torch.nn.functional as F
 
 import time
-from tqdm import trange
+from tqdm import trange, tqdm_notebook
+from tqdm.auto import tqdm
 
 from utils import time_since
 
@@ -403,8 +404,7 @@ class StackAugmentedRNN(nn.Module):
 
         return new_sample
 
-    def fit(self, data, n_iterations, all_losses=[], print_every=100,
-            plot_every=10, augment=False):
+    def fit(self, data, n_iterations, all_losses=[], plot_every=10, augment=False):
         """
         This methods fits the parameters of the model. Training is performed to
         minimize the cross-entropy loss when predicting the next character
@@ -420,10 +420,6 @@ class StackAugmentedRNN(nn.Module):
 
         all_losses: list (default [])
             list to store the values of the loss function
-
-        print_every: int (default 100)
-            feedback will be printed to std_out once every print_every
-            iterations of training
 
         plot_every: int (default 10)
             value of the loss function will be appended to all_losses once every
@@ -446,17 +442,10 @@ class StackAugmentedRNN(nn.Module):
         else:
             smiles_augmentation = None
 
-        for epoch in trange(1, n_iterations + 1, desc='Training in progress...'):
+        for epoch in tqdm(range(1, n_iterations + 1), desc='Training in progress...'):
             inp, target = data.random_training_set(smiles_augmentation)
             loss = self.train_step(inp, target)
             loss_avg += loss
-
-            if epoch % print_every == 0:
-                print('[%s (%d %d%%) %.4f]' % (time_since(start), epoch,
-                                               epoch / n_iterations * 100, loss)
-                      )
-                print(self.evaluate(data=data, prime_str = '<',
-                                    predict_len=100), '\n')
 
             if epoch % plot_every == 0:
                 all_losses.append(loss_avg / plot_every)

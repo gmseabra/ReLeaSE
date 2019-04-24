@@ -286,6 +286,10 @@ def cross_validation_split(x, y, n_folds=5, split='random', folds=None):
 
 def read_object_property_file(path, delimiter=',', cols_to_read=[0, 1],
                               keep_header=False):
+    """
+    Reads the data. Returns an n-dimensional array with the data, where
+    each line is split into 'cols_to_read' sub-arrays for each column.
+    """
     f = open(path, 'r')
     reader = csv.reader(f, delimiter=delimiter)
     data_full = np.array(list(reader))
