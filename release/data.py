@@ -3,6 +3,9 @@ import torch
 import random
 import numpy as np
 
+from tqdm import tnrange, tqdm_notebook
+from tqdm.auto import tqdm
+
 from utils import read_smi_file, tokenize, read_object_property_file
 
 
@@ -60,7 +63,7 @@ class GeneratorData(object):
         self.end_token = end_token
         self.file = []
         # Each element in self.file will have the format: <SMILES>
-        for i in range(len(data)):
+        for i in tqdm(range(len(data)), desc='Selecting valid SMILES:'):
             # Filter SMILES that are too long
             if len(data[i]) <= max_len:
                 self.file.append(self.start_token + data[i] + self.end_token) 
